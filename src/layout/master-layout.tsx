@@ -1,28 +1,44 @@
-import { Home, PiggyBank, UtensilsCrossed } from 'lucide-react'
+import { useEffect } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 
+import { LanguageToggle } from '@/components/language-toggle'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { useI18n } from '@/i18n'
+import { useAppNavItems, useMobileNavItems } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
-
-const navItems = [
-  { to: '/', label: 'Home', icon: Home, end: true },
-  { to: '/expenses', label: 'Expenses', icon: PiggyBank, end: false },
-  { to: '/meals', label: 'Meals', icon: UtensilsCrossed, end: false },
-]
+import { useAppStore } from '@/store/app-store'
 
 export function MasterLayout() {
+  const t = useI18n()
+  const theme = useAppStore((state) => state.theme)
+  const locale = useAppStore((state) => state.locale)
+  const appNavItems = useAppNavItems()
+  const mobileNavItems = useMobileNavItems()
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+    document.documentElement.style.colorScheme = theme
+    document.documentElement.lang = locale
+  }, [locale, theme])
+
   return (
     <div className="flex min-h-screen bg-muted/30 text-foreground">
       <aside className="hidden w-64 border-r bg-background md:flex md:flex-col">
         <div className="border-b px-6 py-5">
-          <p className="text-sm text-muted-foreground">Home Utils</p>
-          <h1 className="text-xl font-semibold">Control center</h1>
+          <p className="text-sm text-muted-foreground">{t.app.name}</p>
+          <h1 className="text-xl font-semibold">{t.app.title}</h1>
         </div>
 
         <nav className="flex flex-1 flex-col gap-2 p-4">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
+          {appNavItems.map(({ to, label, icon: Icon, end }) => (
             <NavItem key={to} to={to} label={label} end={end} Icon={Icon} />
           ))}
         </nav>
+
+        <div className="space-y-3 border-t p-4">
+          <LanguageToggle compact />
+          <ThemeToggle compact />
+        </div>
       </aside>
 
       <div className="flex min-h-screen flex-1 flex-col">
@@ -32,7 +48,7 @@ export function MasterLayout() {
 
         <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 p-2 backdrop-blur md:hidden">
           <div className="mx-auto flex max-w-md items-center justify-around gap-2">
-            {navItems.map(({ to, label, icon: Icon, end }) => (
+            {mobileNavItems.map(({ to, label, icon: Icon, end }) => (
               <NavItem key={to} to={to} label={label} end={end} Icon={Icon} mobile />
             ))}
           </div>

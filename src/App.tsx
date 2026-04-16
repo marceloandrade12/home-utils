@@ -1,10 +1,13 @@
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 
 import { MasterLayout } from '@/layout/master-layout'
 import { ExpensesPage } from '@/pages/expenses-page'
 import { HomePage } from '@/pages/home-page'
 import { MealsPage } from '@/pages/meals-page'
 import { NotFoundPage } from '@/pages/not-found-page'
+
+import { CaravanPage } from './pages/caravan-page'
+import { MorePage } from './pages/more-page'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,14 @@ const router = createBrowserRouter([
       {
         path: 'meals',
         element: <MealsPage />,
+      },
+      {
+        path: 'caravan',
+        element: <CaravanPage />,
+      },
+      {
+        path: 'more',
+        element: <MorePage />,
       },
       {
         path: 'home',
