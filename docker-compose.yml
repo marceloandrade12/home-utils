@@ -1,0 +1,12 @@
+services:
+  home-utils:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: home-utils
+
+    restart: unless-stopped
+
+    ports:
+      - "8081:80"
